@@ -36,7 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $code = current($data)['code'];
     } else {
         $code = generate_code();
-        
+        $ip = get_client_ip();
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+
         $stmt = $db->prepare("select * from url where code = ?");
         $stmt->execute([$code]);
         $exist = $stmt->fetchColumn();
@@ -44,8 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             json(-4, '天选之子，再来一次!');
         }
 
-        $stmt = $db->prepare("insert into url(code, hash, url) values (?, ?, ?)");
-        $result = $stmt->execute([$code, $hash, $url]);
+        $stmt = $db->prepare("insert into url(code, hash, url, ip, user_agent) values (?, ?, ?, ?, ?)");
+        $result = $stmt->execute([$code, $hash, $url, $ip, $user_agent]);
         if (!$result) {
             json(-5, '系统繁忙，请稍后再试!');
         }
@@ -99,6 +101,16 @@ function generate_code() {
     }
     shuffle($depository);
     return join('', array_slice($depository, 0, CODE_LENGTH));
+}
+
+function get_client_ip() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        return $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        return $_SERVER['REMOTE_ADDR'];
+    }
 }
 
 header("Content-Type: text/html");
