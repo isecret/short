@@ -47,7 +47,7 @@ server {
 ```
 <?php
 // 数据库连接字符串 host 主机名; dbname 数据库名; charset 字符集编码
-define('DB_DSN', 'mysql:host=mysql5;dbname=short;charset=utf8mb4');
+define('DB_DSN', 'mysql:host=localhost;dbname=short;charset=utf8mb4');
 
 // 数据库用户名
 define('DB_USER', 'root');
