@@ -85,9 +85,9 @@ define('DB_PASSWD', null);
 define('CODE_LENGTH', 6);
 ```
 
-### API
+## API
 
-#### 生成短链接
+### 生成短链接
 你可以通过域名访问页面或使用接口生成 URL，地址为 `/`，请求方式为 `POST`，参数为 `url` 即你的长链接。
 
 ```bash
