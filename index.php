@@ -162,6 +162,9 @@ header("Content-Type: text/html");
         }
         .site-body-item {
             margin: 22px 0 22px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .site-input {
             border-radius: 3px;
@@ -186,7 +189,7 @@ header("Content-Type: text/html");
             display: inline-block;
             line-height: 1.25;
             outline: 0;
-            vertical-align: middle
+            margin-left: 4px;
         }
         .site-button:hover {
             background-color: #f9f9f9;
