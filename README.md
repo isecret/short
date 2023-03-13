@@ -14,7 +14,7 @@
 ```conf
 server {
     listen  80;
-    server_name  http://0x64.cn;
+    server_name  0x64.cn;
     root   /www/0x64.cn;
     index  index.php index.html index.htm;
     
