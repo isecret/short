@@ -155,6 +155,7 @@ header("Content-Type: text/html");
             border-radius: 3px;
             padding: 5px;
             font-size: 14px;
+            line-height: 1.2;
             border: 1px solid #ccc;
             width: 280px;
             box-sizing: border-box;
@@ -166,17 +167,18 @@ header("Content-Type: text/html");
             text-decoration: none;
             font-weight: 700;
             padding: 4px 15px 3px;
-            border: 1px solid rgba(80,80,90,.2);
+            border: 1px solid #ccc;
             border-radius: 3px;
             font-size: 14px;
             font-family: Arial,sans-serif;
             display: inline-block;
-            line-height: 1.4;
+            line-height: 1.25;
             outline: 0;
+            vertical-align: middle
         }
         .site-button:hover {
             background-color: #f9f9f9;
-            border: 1px solid rgba(60,60,70,.3);
+            border: 1px solid #ccc;
             color: #333;
             text-shadow: 0 1px 0 #fff;
             text-decoration: none;
@@ -189,6 +191,7 @@ header("Content-Type: text/html");
             color: #bbb;
         }
     </style>
+    <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3948736_5826ppfenst.css">
 </head>
 <body>
     <div class="container">
@@ -199,11 +202,11 @@ header("Content-Type: text/html");
         <div class="site-body">
             <div class="site-body-item">
                 <input type="text" name="url" class="site-input"/>
-                <input type="button" name="submit" value="Short" class="site-button"/>
+                <div id="submit" class="site-button"><i class="iconfont icon-exchange"></i></div>
             </div>
             <div class="site-body-item">
                 <input type="text" name="short_url" class="site-input" />
-                <input type="button" name="copy" value="Copy" class="site-button"/>
+                <div id="copy" class="site-button"><i class="iconfont icon-copy"></i></div>
             </div>
         </div>
         <div class="site-footer">
@@ -211,7 +214,7 @@ header("Content-Type: text/html");
         </div>
     </div>
     <script>
-        $('input[name=submit]').click(function () {
+        $('#submit').click(function () {
             var url = $('input[name=url]').val();
 
             if (url == '') {
@@ -233,7 +236,7 @@ header("Content-Type: text/html");
             }, 'json')
         });
 
-        $('input[name=copy]').click(function () {
+        $('copy').click(function () {
             $("input[name=short_url]").focus();
             $("input[name=short_url]").select();
             document.execCommand("Copy");
