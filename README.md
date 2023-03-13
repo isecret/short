@@ -6,7 +6,7 @@
 
 ![截图](./screenshot.png)
 
-## 快速配置
+## 配置
 
 ### 安装
 #### 1. 下载源码，部署至服务器，环境 `PHP > 5.6`，需安装 `PDO` 扩展。
@@ -14,12 +14,12 @@
 ```conf
 server {
     listen  80;
-    server_name  url.local;
-    root   /www/url;
+    server_name  http://0x64.cn;
+    root   /www/0x64.cn;
     index  index.php index.html index.htm;
     
     access_log /dev/null;
-    error_log  /var/log/nginx/nginx.url.error.log  warn;
+    error_log  /var/log/nginx/nginx.0x64.error.log  warn;
 
     # 伪静态 必须
     location / {
@@ -78,12 +78,36 @@ define('DB_PASSWD', null);
 ###### 3.2.2 创建数据库文件
 复制 `sqlite.db.exp` 为 `data.db`
 
-### 4 配置短链接字符长度
+### 4. 配置短链接字符长度
 
 ```php
 // 生成短链接随机字符长度 默认 6 位 不超过 32 位
 define('CODE_LENGTH', 6);
 ```
+
+### API
+
+#### 生成短链接
+你可以通过域名访问页面或使用接口生成 URL，地址为 `/`，请求方式为 `POST`，参数为 `url` 即你的长链接。
+
+```bash
+$ curl -X POST -d 'url=http://github.com' http://0x64.cn
+{
+  "code": 0,
+  "msg": "OK",
+  "data": {
+    "short": "0x64.cn/8FuHf5",
+    "generic": "http://0x64.cn/8FuHf5",
+    "long": "https://0x64.cn/8FuHf5"
+  }
+}
+```
+
+| 字段 | 协议 | 兼容性 | 字符长度 |
+| ---- | ---- | ---- | ---- | 
+| short | 自动识别 | 较差 | 最短 |
+| generic  | http | 较好 | 较短 |
+| long  | https | 好 | 较长 |
 
 ## TODO List
 - 后台管理
