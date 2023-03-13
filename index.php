@@ -236,7 +236,7 @@ header("Content-Type: text/html");
             }, 'json')
         });
 
-        $('copy').click(function () {
+        $('#copy').click(function () {
             $("input[name=short_url]").focus();
             $("input[name=short_url]").select();
             document.execCommand("Copy");
