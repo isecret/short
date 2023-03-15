@@ -69,6 +69,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $data = $stmt->fetchAll();
         if ($data) {
             $url = current($data)['url'];
+            $url_id = current($data)['id'];
+            $ip = get_client_ip();
+            $user_agent = $_SERVER['HTTP_USER_AGENT'];
+            $visit_count = current($data)['visit_count'] + 1;
+
+            $stmt = $db->prepare("update url set visit_count=? where id = ?");
+            $stmt->execute([$visit_count, $url_id]);
+
+            $stmt = $db->prepare("insert into visit_history(url_id, ip, user_agent) values (?, ?, ?)");
+            $stmt->execute([$url_id, $ip, $user_agent]);
+
             header("Location: {$url}");
         } else {
             header("Location: /");
