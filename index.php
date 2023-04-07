@@ -27,6 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $db = db();
     $hash = md5($url);
+    $domain = parse_url($url)['host'];
+
+    if (is_domain_blocked($domain)) {
+        json(-6, '该域名不在服务范围!');
+    }
 
     $stmt = $db->prepare("select * from url where hash = ?");
     $stmt->execute([$hash]);
@@ -69,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $data = $stmt->fetchAll();
         if ($data) {
             $url = current($data)['url'];
+            $domain = parse_url($url)['host'];
             $url_id = current($data)['id'];
             $ip = get_client_ip();
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
@@ -80,7 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $db->prepare("insert into visit_history(url_id, ip, user_agent) values (?, ?, ?)");
             $stmt->execute([$url_id, $ip, $user_agent]);
 
-            header("Location: {$url}");
+            if (is_domain_blocked($domain)) {
+                http_response_code(403);
+            } else {
+                header("Location: {$url}");
+            }
         } else {
             header("Location: /");
         }
@@ -122,6 +132,20 @@ function get_client_ip() {
     } else {
         return $_SERVER['REMOTE_ADDR'];
     }
+}
+
+function is_domain_blocked($domain) {
+    $db = db();
+    $stmt = $db->prepare("select * from blacklist");
+    $stmt->execute();
+    $blacklist = $stmt->fetchAll();
+
+    foreach ($blacklist as $blocked_domain) {
+        if (fnmatch($blocked_domain['domain'], $domain, FNM_CASEFOLD | FNM_NOESCAPE)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 header("Content-Type: text/html");

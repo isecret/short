@@ -21,3 +21,10 @@ CREATE TABLE `visit_history` (
   PRIMARY KEY (`id`),
   KEY `idx_url_id` (`url_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `blacklist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `domain` varchar(255) NOT NULL,
+  `create_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4;
