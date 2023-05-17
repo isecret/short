@@ -28,19 +28,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $db = db();
     $hash = md5($url);
     $domain = parse_url($url)['host'];
+    $code = null;
+    $data = null;
 
     if (is_domain_blocked($domain)) {
         json(-6, '该域名不在服务范围!');
     }
 
-    $stmt = $db->prepare("select * from url where hash = ?");
-    $stmt->execute([$hash]);
-    $data = $stmt->fetchAll();
+    if (empty($_POST['code'])) {
+        $stmt = $db->prepare("select * from url where hash = ?");
+        $stmt->execute([$hash]);
+        $data = $stmt->fetchAll();
+    } else {
+        $code = $_POST['code'];
+        $stmt = $db->prepare("select * from url where code = ?");
+        $stmt->execute([$code]);
+        $codeExist = $stmt->fetchAll();
+        if ($codeExist) {
+            if (current($codeExist)['hash'] == $hash) {
+                $data[] = ['code' => current($codeExist)['code']];
+            } else {
+                json(-7, '该 Code 已占用，更换一个呗!');
+            }
+        }
+    }
 
     if ($data) {
         $code = current($data)['code'];
     } else {
-        $code = generate_code();
+        if (empty($code)) {
+            $code = generate_code();
+        }
         $ip = get_client_ip();
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
 

@@ -88,9 +88,10 @@ define('CODE_LENGTH', 6);
 ## API
 
 ### 生成短链接
-你可以通过域名访问页面或使用接口生成 URL，地址为 `/`，请求方式为 `POST`，参数为 `url` 即你的长链接。
+你可以通过域名访问页面或使用接口生成 URL，地址为 `/`，请求方式为 `POST`，参数为 `url` 即你的长链接；`code` 为自定义短链接（可选）。
 
 ```bash
+# 自动生成短链接
 $ curl -X POST -d 'url=http://github.com' http://0x64.cn
 {
   "code": 0,
@@ -99,6 +100,18 @@ $ curl -X POST -d 'url=http://github.com' http://0x64.cn
     "short": "0x64.cn/8FuHf5",
     "generic": "http://0x64.cn/8FuHf5",
     "long": "https://0x64.cn/8FuHf5"
+  }
+}
+
+# 自定义短链接
+$curl -X POST -d 'url=http://github.com&code=github' http://0x64.cn
+{
+  "code": 0,
+  "msg": "OK",
+  "data": {
+    "short": "0x64.cn/github",
+    "generic": "http://0x64.cn/github",
+    "long": "https://0x64.cn/github"
   }
 }
 ```
